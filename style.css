@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    border: 2px solid red;
+}
+
+.calculator .buttons {
+    width: 560px;
+    max-width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    border: 2px solid red;
+
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px  20px;
+    padding: 10px;
+}
+
+
+.buttons button {
+    /* 40px to account for space between button*/
+    flex: 0 0 calc((100% - 40px)/ 3);
+    padding: 10px 16px;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    margin: 0px;
+}
+#display {
+    flex: 1 1 100%;
+    min-height: 35px;
+    width: auto;
+    height: auto;
+    padding: 8px 10px;
+ 
+}
