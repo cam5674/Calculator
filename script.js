@@ -33,11 +33,16 @@ function operate (a,b,c) {
 
 }
 
+function parse(text) {
+    
+}
+
 // store values in cal object
 const cal = {
-    left: undefined,
-    right: undefined,
-    operation: undefined
+    precedence: {"+": 1, "-": 1, "*": 2, "/": 2},
+    operands:[],
+    operators:[],
+    token: "",
 }
 const operations = ["+", "-", "/", "*"]
 const buttons = document.querySelectorAll('button')
@@ -46,28 +51,72 @@ const display = document.getElementById("display");
 buttons.forEach(button => {
     button.addEventListener("click", (event) =>{
 
-  
+        
         const numberButton = event.target.innerText;
-        display.value = numberButton;
-        const text = numberButton.trim()
-        // stack??
-        if (operations.includes(text)){
-            cal.operation = text
-            // check if a decmial
-        } else if (/^d\$/.test(text)){
+        const text = numberButton.trim();
+        console.log(text)
 
-         if (cal.right !== undefined && cal.operation !== undefined){
-            cal.left = Number(text);
-        }
-        else if (cal.operation === undefined){
-            // get right key value and append if already exist
-            cal.right = (cal.right === undefined) ? Number(text) : Number(String(cal.right) + text);
 
-        } else {
-            cal.right = (cal.right === undefined) ? Number(text) : Number(String(cal.right) + text);
+        // get input from user
+        let op = null
+        if (operations.includes(text)) {op = text;}
+        let digit = (/^\d$|^\.$/.test(text));
+        let equal = text === "=";
+        let clear = text === "clear";
+        
+
+        // check if digit and then append to the token string
+        if (digit) {
+            if (text === "." && cal.input.includes("." )) return;
+            cal.token += text;
+            display.value = cal.token
+            return
         }
-    }
-    
+
+        // if operator was pressed
+        if (op) {
+
+            // Gaurd against the user clicking an operator first
+            // TEST GAURD 
+            if (cal.operands.length === 0 && cal.token === ""){
+                return;
+            }
+
+            // push token to operands if token is not empty
+            if (cal.token !== "") {
+            cal.operands.push(Number(cal.token))
+            cal.token = "";
+            }
+            console.log(cal)
+            // get incoming operator and compare it to the top of the stack
+            // check precedence and complete computation until the stack is empty
+
+            while (cal.operators.length > 0 && cal.precedence[cal.operators.at(-1)] >= cal.precedence[op]){
+                // get sign, right and left operand
+                const sign = cal.operators.pop();
+                const b = cal.operands.pop();
+                const a = cal.operands.pop();
+
+                // guard: if missing operands
+                if (a == undefined || b == undefined) {
+                    break;
+                }
+                // get result and push result to operands
+                const result = operate(a,b,sign);
+                console.log(`After while loop ${cal}`)
+                console.log(cal)
+                cal.operands.push(result)
+                display.value = result
+            }
+            cal.operators.push(op)
+
+        }
+        
+        // Need to figure out logic for "="
+        if (text == "=") {
+
+        }
+        
 
         console.log(cal)
         /* Add logic to store numbers until user preses =*/
