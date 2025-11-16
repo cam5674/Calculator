@@ -1,5 +1,5 @@
-
-
+// TODO:round answers with long decimals
+ 
 function add(a,b) {
     return a + b
 
@@ -15,6 +15,7 @@ function multiply(a,b) {
 
 
 function divide(a,b) {
+    if (b === 0){return NaN;}
     return a / b
 }
 
@@ -33,7 +34,6 @@ function operate (a,b,c) {
 
 }
 
-
 function parse(text) {
     
 }
@@ -45,6 +45,14 @@ const cal = {
     operators:[],
     token: "",
     prev: {op: null, number: null}
+}
+
+function clearCal () {
+    cal.operands.length = 0;
+    cal.operators.length = 0;
+    cal.token = "";
+    cal.prev.op = null;
+    cal.prev.number = null;
 }
 const operations = ["+", "-", "/", "*"]
 const buttons = document.querySelectorAll('button')
@@ -69,11 +77,19 @@ buttons.forEach(button => {
 
         // check if digit and then append to the token string
         if (digit) {
-            if (text === "." && cal.input.includes("." )) return;
+            if (text === "." && cal.token.includes("." )) return;
             cal.token += text;
             display.value = cal.token
             return
         }
+        // wipes out existing data
+        if (clear) {
+            display.value = ""
+            // wipes out existing data
+            clearCal();
+            return;
+        }
+
 
         // if operator was pressed
         if (op) {
@@ -105,11 +121,16 @@ buttons.forEach(button => {
                 const a = cal.operands.pop();
 
                 // guard: if missing operands
-                if (a == undefined || b == undefined) {
+                if (a === undefined || b === undefined) {
                     break;
                 }
                 // get result and push result to operands
                 const result = operate(a,b,sign);
+                if (Number.isNaN(result)){
+                    display.value = "NaN";
+                    clearCal();
+                    return;
+                }
                 console.log(`After while loop ${cal}`)
                 console.log(cal)
                 cal.operands.push(result)
@@ -120,7 +141,7 @@ buttons.forEach(button => {
         }
         
         // Need to figure out logic for "="
-        if (text === "=") {
+        if (equal) {
             console.log("ENTERING = logic")
              // Gaurd against the user clicking an operator first
             // TEST GAURD 
@@ -128,9 +149,15 @@ buttons.forEach(button => {
                 return;
             }
             // check for double equal sign
-            if (cal.operands.length === 0 && cal.operators.length === 0 && cal.token !== ""){
+            if (
+                cal.operands.length === 0 && 
+                cal.operators.length === 0 && 
+                cal.token !== "" &&
+                cal.prev.op !== null &&
+                cal.prev.number !== null
+            ){
                 
-                result = operate(Number(cal.token), cal.prev.number, cal.prev.op);
+                const result = operate(Number(cal.token), cal.prev.number, cal.prev.op);
                 // clear token before adding result
                 cal.token = "";
                 cal.token += String(result);
@@ -160,9 +187,14 @@ buttons.forEach(button => {
                 }
                 // get result and push result to operands
                 const result = operate(a,b,sign);
+                 if (Number.isNaN(result)){
+                    display.value = "NaN";
+                    clearCal();
+                    return;
+                }
                 console.log(`After while loop ${cal}`)
                 console.log(cal)
-                cal.token += String(result);
+                cal.token = String(result);
                 display.value = result
 
                 // record operand and operator in prev

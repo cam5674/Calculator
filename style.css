@@ -33,6 +33,7 @@
     margin: 0px;
 }
 #display {
+    text-align: right;
     flex: 1 1 100%;
     min-height: 35px;
     width: auto;
