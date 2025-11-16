@@ -33,6 +33,7 @@ function operate (a,b,c) {
 
 }
 
+
 function parse(text) {
     
 }
@@ -43,6 +44,7 @@ const cal = {
     operands:[],
     operators:[],
     token: "",
+    prev: {op: null, number: null}
 }
 const operations = ["+", "-", "/", "*"]
 const buttons = document.querySelectorAll('button')
@@ -81,6 +83,10 @@ buttons.forEach(button => {
             if (cal.operands.length === 0 && cal.token === ""){
                 return;
             }
+            //Gaurd against the user clicking the same operator twice
+            if (cal.token === ""){
+                return;
+            }
 
             // push token to operands if token is not empty
             if (cal.token !== "") {
@@ -93,6 +99,7 @@ buttons.forEach(button => {
 
             while (cal.operators.length > 0 && cal.precedence[cal.operators.at(-1)] >= cal.precedence[op]){
                 // get sign, right and left operand
+                console.log(cal)
                 const sign = cal.operators.pop();
                 const b = cal.operands.pop();
                 const a = cal.operands.pop();
@@ -113,7 +120,55 @@ buttons.forEach(button => {
         }
         
         // Need to figure out logic for "="
-        if (text == "=") {
+        if (text === "=") {
+            console.log("ENTERING = logic")
+             // Gaurd against the user clicking an operator first
+            // TEST GAURD 
+            if (cal.operands.length === 0 && cal.token === ""){
+                return;
+            }
+            // check for double equal sign
+            if (cal.operands.length === 0 && cal.operators.length === 0 && cal.token !== ""){
+                
+                result = operate(Number(cal.token), cal.prev.number, cal.prev.op);
+                // clear token before adding result
+                cal.token = "";
+                cal.token += String(result);
+                display.value = result;
+                console.log(cal)
+                return;
+
+            }
+
+            // push token to operands if token is not empty
+            if (cal.token !== "") {
+            cal.operands.push(Number(cal.token))
+            cal.token = "";
+            }
+
+            // clear the stack and append the result to operands
+            while (cal.operators.length > 0) {
+                 // get sign, right and left operand
+                console.log(cal)
+                const sign = cal.operators.pop();
+                const b = cal.operands.pop();
+                const a = cal.operands.pop();
+
+                // guard: if missing operands
+                if (a == undefined || b == undefined) {
+                    break;
+                }
+                // get result and push result to operands
+                const result = operate(a,b,sign);
+                console.log(`After while loop ${cal}`)
+                console.log(cal)
+                cal.token += String(result);
+                display.value = result
+
+                // record operand and operator in prev
+                cal.prev.op = sign;
+                cal.prev.number = b;
+            }
 
         }
         
