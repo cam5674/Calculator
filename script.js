@@ -47,6 +47,7 @@ const cal = {
     prev: {op: null, number: null}
 }
 
+// clears cal object
 function clearCal () {
     cal.operands.length = 0;
     cal.operators.length = 0;
@@ -54,6 +55,7 @@ function clearCal () {
     cal.prev.op = null;
     cal.prev.number = null;
 }
+
 const operations = ["+", "-", "/", "*"]
 const buttons = document.querySelectorAll('button')
 const display = document.getElementById("display");
@@ -85,7 +87,6 @@ buttons.forEach(button => {
         // wipes out existing data
         if (clear) {
             display.value = ""
-            // wipes out existing data
             clearCal();
             return;
         }
@@ -94,12 +95,11 @@ buttons.forEach(button => {
         // if operator was pressed
         if (op) {
 
-            // Gaurd against the user clicking an operator first
-            // TEST GAURD 
+            // guard against the user clicking an operator first
             if (cal.operands.length === 0 && cal.token === ""){
                 return;
             }
-            //Gaurd against the user clicking the same operator twice
+            // guard against the user clicking the same operator twice
             if (cal.token === ""){
                 return;
             }
@@ -140,11 +140,9 @@ buttons.forEach(button => {
 
         }
         
-        // Need to figure out logic for "="
         if (equal) {
             console.log("ENTERING = logic")
-             // Gaurd against the user clicking an operator first
-            // TEST GAURD 
+             // guard against the user clicking an operator first
             if (cal.operands.length === 0 && cal.token === ""){
                 return;
             }
@@ -187,6 +185,8 @@ buttons.forEach(button => {
                 }
                 // get result and push result to operands
                 const result = operate(a,b,sign);
+
+                // divide by 0 guard
                  if (Number.isNaN(result)){
                     display.value = "NaN";
                     clearCal();
@@ -204,16 +204,6 @@ buttons.forEach(button => {
 
         }
         
-
-        console.log(cal)
-        /* Add logic to store numbers until user preses =*/
-
     });
 
 });
-
-/* Example: User preses 3 + 3: You will store three variables - 3, +, 3
-
-   Call operate when user clicks = 
-    
-    */
