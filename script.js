@@ -1,5 +1,4 @@
-// TODO:round answers with long decimals
- 
+
 function add(a,b) {
     return a + b
 
@@ -44,7 +43,8 @@ const cal = {
     operands:[],
     operators:[],
     token: "",
-    prev: {op: null, number: null}
+    prev: {op: null, number: null},
+    resultDisplayed: false
 }
 
 // clears cal object
@@ -54,6 +54,7 @@ function clearCal () {
     cal.token = "";
     cal.prev.op = null;
     cal.prev.number = null;
+    cal.resultDisplayed = false;
 }
 
 const operations = ["+", "-", "/", "*"]
@@ -79,10 +80,15 @@ buttons.forEach(button => {
 
         // check if digit and then append to the token string
         if (digit) {
+            if (cal.resultDisplayed && cal.operators.length == 0) {
+                clearCal();
+                display.value = "";
+            }
             if (text === "." && cal.token.includes("." )) return;
             cal.token += text;
             display.value = cal.token
-            return
+            cal.resultDisplayed = false;
+            return;
         }
         // wipes out existing data
         if (clear) {
@@ -110,10 +116,11 @@ buttons.forEach(button => {
             cal.token = "";
             }
             console.log(cal)
+
             // get incoming operator and compare it to the top of the stack
             // check precedence and complete computation until the stack is empty
-
             while (cal.operators.length > 0 && cal.precedence[cal.operators.at(-1)] >= cal.precedence[op]){
+                
                 // get sign, right and left operand
                 console.log(cal)
                 const sign = cal.operators.pop();
@@ -124,6 +131,7 @@ buttons.forEach(button => {
                 if (a === undefined || b === undefined) {
                     break;
                 }
+
                 // get result and push result to operands
                 const result = operate(a,b,sign);
                 if (Number.isNaN(result)){
@@ -146,6 +154,7 @@ buttons.forEach(button => {
             if (cal.operands.length === 0 && cal.token === ""){
                 return;
             }
+
             // check for double equal sign
             if (
                 cal.operands.length === 0 && 
@@ -160,6 +169,7 @@ buttons.forEach(button => {
                 cal.token = "";
                 cal.token += String(result);
                 display.value = result;
+                cal.resultDisplayed = true;
                 console.log(cal)
                 return;
 
@@ -171,8 +181,14 @@ buttons.forEach(button => {
             cal.token = "";
             }
 
+            // guard for "5 + ="
+            if (cal.operators.length > 0 && cal.operands.length == 1) {
+                cal.operands.push(cal.operands[0])
+            }
+
             // clear the stack and append the result to operands
             while (cal.operators.length > 0) {
+                
                  // get sign, right and left operand
                 console.log(cal)
                 const sign = cal.operators.pop();
@@ -192,15 +208,18 @@ buttons.forEach(button => {
                     clearCal();
                     return;
                 }
+                cal.operands.push(result)
                 console.log(`After while loop ${cal}`)
                 console.log(cal)
                 cal.token = String(result);
                 display.value = result
+                cal.resultDisplayed = true;
 
                 // record operand and operator in prev
                 cal.prev.op = sign;
                 cal.prev.number = b;
             }
+            cal.operands.length = 0;
 
         }
         
