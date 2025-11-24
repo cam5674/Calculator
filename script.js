@@ -33,9 +33,6 @@ function operate (a,b,c) {
 
 }
 
-function parse(text) {
-    
-}
 
 // store values in cal object
 const cal = {
@@ -142,7 +139,7 @@ buttons.forEach(button => {
                 console.log(`After while loop ${cal}`)
                 console.log(cal)
                 cal.operands.push(result)
-                display.value = result
+                display.value = parseFloat(result.toFixed(12)).toString();
             }
             cal.operators.push(op)
 
@@ -168,7 +165,7 @@ buttons.forEach(button => {
                 // clear token before adding result
                 cal.token = "";
                 cal.token += String(result);
-                display.value = result;
+                display.value = parseFloat(result.toFixed(12)).toString();
                 cal.resultDisplayed = true;
                 console.log(cal)
                 return;
@@ -188,7 +185,7 @@ buttons.forEach(button => {
 
             // clear the stack and append the result to operands
             while (cal.operators.length > 0) {
-                
+
                  // get sign, right and left operand
                 console.log(cal)
                 const sign = cal.operators.pop();
@@ -204,7 +201,7 @@ buttons.forEach(button => {
 
                 // divide by 0 guard
                  if (Number.isNaN(result)){
-                    display.value = "NaN";
+                    display.value = "ERROR";
                     clearCal();
                     return;
                 }
@@ -212,7 +209,7 @@ buttons.forEach(button => {
                 console.log(`After while loop ${cal}`)
                 console.log(cal)
                 cal.token = String(result);
-                display.value = result
+                display.value = parseFloat(result.toFixed(12)).toString();
                 cal.resultDisplayed = true;
 
                 // record operand and operator in prev

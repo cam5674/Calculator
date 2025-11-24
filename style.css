@@ -15,6 +15,9 @@
 .btn.op {
     background: #D64933;    
 }
+.btn.op:hover {
+    background-color: #962F1F;    
+}
 
 
 .btn {
