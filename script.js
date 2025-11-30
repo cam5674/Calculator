@@ -1,42 +1,66 @@
 
 function add(a,b) {
-    return a + b
+    return a + b;
 
 }
 
 function subtract(a,b) {
-    return a - b
+    return a - b;
 }
 
 function multiply(a,b) {
-    return a * b
+    return a * b;
 }
 
 
 function divide(a,b) {
     if (b === 0){return NaN;}
-    return a / b
+    return a / b;
 }
 
-
+function exponent(a,b) {
+    return Math.pow(a,b);
+}
 function operate (a,b,c) {
     if (c == "+"){
-        return add(a,b)
+        return add(a,b);
     } else if (c == "-"){
-        return (subtract(a,b))
+        return (subtract(a,b));
     } else if (c == "*"){
         return multiply(a,b)
     } else if (c == "/"){
-        return divide(a,b)
-    } else
-        return "OPERATION ERROR"
+        return divide(a,b);
+    } else if(c == "^"){
+        return exponent(a,b);
+    }
+    else
+        return "OPERATION ERROR";
 
 }
 
 
+// formats the display by rounding to 12 decimal places and using
+// toExponential if the number is too long.
+function formatDisplay(num) {
+    if (!Number.isFinite(num)) {
+        return "ERROR";
+    }
+    const maxLength = 12;
+
+    // round to 12 decimals
+    let str = num.toFixed(12).replace(/\.?0+$/, "");
+    if (str === "-0") str = "0";
+
+    // if number is too large, use exponential
+    if (str.length > maxLength){
+        str = num.toExponential(6).replace(/\.?0+e/, "e");
+    }
+
+    return str;   
+}
 // store values in cal object
 const cal = {
-    precedence: {"+": 1, "-": 1, "*": 2, "/": 2},
+    precedence: {"+": 1, "-": 1, "*": 2, "/": 2, "^": 3 },
     operands:[],
     operators:[],
     token: "",
@@ -54,7 +78,7 @@ function clearCal () {
     cal.resultDisplayed = false;
 }
 
-const operations = ["+", "-", "/", "*"]
+const operations = ["+", "-", "/", "*", "^"]
 const buttons = document.querySelectorAll('button')
 const display = document.getElementById("display");
 
@@ -64,7 +88,6 @@ buttons.forEach(button => {
         
         const numberButton = event.target.innerText;
         const text = numberButton.trim();
-        console.log(text)
 
 
         // get input from user
@@ -73,6 +96,7 @@ buttons.forEach(button => {
         let digit = (/^\d$|^\.$/.test(text));
         let equal = text === "=";
         let clear = text === "clear";
+
         
 
         // check if digit and then append to the token string
@@ -112,14 +136,23 @@ buttons.forEach(button => {
             cal.operands.push(Number(cal.token))
             cal.token = "";
             }
-            console.log(cal)
 
             // get incoming operator and compare it to the top of the stack
             // check precedence and complete computation until the stack is empty
-            while (cal.operators.length > 0 && cal.precedence[cal.operators.at(-1)] >= cal.precedence[op]){
-                
+            while (cal.operators.length > 0) {
+                const incomingPrec = cal.precedence[op];
+                const topOp = cal.operators.at(-1);
+                const topPrec = cal.precedence[topOp];
+                const rightAssociative = op === "^";
+
+                // For power (^), only collapse when the stack top has strictly higher precedence.
+                // For other operators, collapse on higher or equal precedence.
+                // allows chained exponents such as 2^3^2
+                const shouldCollapse =
+                    topPrec > incomingPrec || (topPrec === incomingPrec && !rightAssociative);
+                if (!shouldCollapse) break;
+
                 // get sign, right and left operand
-                console.log(cal)
                 const sign = cal.operators.pop();
                 const b = cal.operands.pop();
                 const a = cal.operands.pop();
@@ -136,17 +169,14 @@ buttons.forEach(button => {
                     clearCal();
                     return;
                 }
-                console.log(`After while loop ${cal}`)
-                console.log(cal)
                 cal.operands.push(result)
-                display.value = parseFloat(result.toFixed(12)).toString();
+                display.value = formatDisplay(result);
             }
             cal.operators.push(op)
 
         }
         
         if (equal) {
-            console.log("ENTERING = logic")
              // guard against the user clicking an operator first
             if (cal.operands.length === 0 && cal.token === ""){
                 return;
@@ -165,9 +195,8 @@ buttons.forEach(button => {
                 // clear token before adding result
                 cal.token = "";
                 cal.token += String(result);
-                display.value = parseFloat(result.toFixed(12)).toString();
+                display.value = formatDisplay(result);
                 cal.resultDisplayed = true;
-                console.log(cal)
                 return;
 
             }
@@ -187,7 +216,6 @@ buttons.forEach(button => {
             while (cal.operators.length > 0) {
 
                  // get sign, right and left operand
-                console.log(cal)
                 const sign = cal.operators.pop();
                 const b = cal.operands.pop();
                 const a = cal.operands.pop();
@@ -206,10 +234,8 @@ buttons.forEach(button => {
                     return;
                 }
                 cal.operands.push(result)
-                console.log(`After while loop ${cal}`)
-                console.log(cal)
                 cal.token = String(result);
-                display.value = parseFloat(result.toFixed(12)).toString();
+                display.value = formatDisplay(result);
                 cal.resultDisplayed = true;
 
                 // record operand and operator in prev

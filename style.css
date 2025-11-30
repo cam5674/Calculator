@@ -1,5 +1,17 @@
+
+.orbitron-cal {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+body {
+    font-family: 'Orbitron', "Roboto Mono", "Consolas", "Courier New", monospace;
+}
 .container {
-    background-color: #92DCE5;
+    background-color: #50A2A7;
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -12,41 +24,40 @@
     background-color: #EEE5E9;
 
 }
-.btn.op {
-    background: #D64933;    
-}
-.btn.op:hover {
-    background-color: #962F1F;    
-}
-
-
 .btn {
-    font-size: 1.2rem;   
-    font-weight: 600;    
+    font-family: 'Orbitron', "Roboto Mono", "Consolas", "Courier New", monospace;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
-.btn.digit {
-    font-size: 1.3rem;   
-    font-weight: 700;
-}
-
-.btn.op {
-    font-size: 1.3rem;
-    font-weight: 700;
-}
-
+.btn.digit,
+.btn.op,
 .btn.action {
     font-size: 1.3rem;
     font-weight: 700;
 }
 
+.btn.op {
+    background: #9B2915;
+}
+.btn.op:hover {
+    background-color: #e93317;
+}
+
+.btn.action {
+    background: #E9B44C;
+}
+
+.btn.action:hover {
+    background-color:  #faa701;
+}
 .calculator .buttons {
     width: 560px;
     max-width: 100%;
 
     display: flex;
     flex-wrap: wrap;
-    border: 5px solid #7c7c7c;
+    border: 2px solid #1C110A;
 
     justify-content: flex-start;
     align-items: flex-start;
@@ -66,14 +77,14 @@
 }
 #display {
     text-align: right;
+    max-width: 100%;
+    box-sizing: border-box;
     flex: 1 1 100%;
     min-height: 35px;
     width: auto;
     height: auto;
     padding: 8px 10px;
-    font-family: inherit;
+    font-family: 'Orbitron';
     font-size: 2rem;    
     font-weight: 700;
-    
- 
 }
