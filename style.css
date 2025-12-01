@@ -11,7 +11,7 @@ body {
     font-family: 'Orbitron', "Roboto Mono", "Consolas", "Courier New", monospace;
 }
 .container {
-    background-color: #50A2A7;
+    background-color: #0D6E6E;
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -46,32 +46,39 @@ body {
 .btn.toggle,
 .btn.square,
 .btn.backspace {
-  background: #cfd8e3;
+  background: #e0e0e0;
 }
 
 .btn.eq:hover,
 .btn.toggle:hover,
 .btn.square:hover,
 .btn.backspace:hover {
-  background: #b8c4d2; /* hover shade */
+  background: #cacaca;
 }
 
 .btn.op {
-    background: #e93317;
+     background: #E63737;
 }
 .btn.op:hover {
-    background-color: #9B2915;
+    background: #cf3232; 
 }
 .btn.digit:hover {
-    background-color: #e0e7ef ;
+    background: #cad0d7; 
 }
 
 .btn.action {
-    background: #faa701;
+    background: #4a9d9c;
 }
 
 .btn.action:hover {
-    background-color:  #E9B44C;
+    background:  #438d8c; 
+}
+
+.btn.digit {
+    background: #ffe0c8;
+}
+.btn.digit:hover {
+    background: #e6cab4;
 }
 .calculator .buttons {
     width: 560px;
