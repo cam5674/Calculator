@@ -65,6 +65,28 @@ describe("Input/Display", () => {
   });
 });
 
+describe("Toggle Sign", () => {
+  test("toggles positive input to negative", () => {
+    clickButtons("3", "toggle");
+    expect(display.value).toBe("-3");
+  });
+
+  test("toggles negative input back to positive", () => {
+    clickButtons("3", "toggle", "toggle");
+    expect(display.value).toBe("3");
+  });
+
+  test("toggle after equals flips the displayed result", () => {
+    clickButtons("2", "add", "3", "equal", "toggle");
+    expect(display.value).toBe("-5");
+  });
+
+  test("toggle with empty token initializes to zero then negates", () => {
+    clickButtons("toggle");
+    expect(display.value).toBe("-0");
+  });
+});
+
 describe("Binary Ops & Precedence", () => {
   test("simple addition operation", () => {
     clickButtons("7", "1", "3", "add", "3", "4", "equal");

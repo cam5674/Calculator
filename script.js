@@ -1,4 +1,6 @@
 
+// TODO: Add +- button to calculator and maybe % or backspace button
+// 4 x 5 display 
 function add(a,b) {
     return a + b;
 
@@ -78,6 +80,22 @@ function clearCal () {
     cal.resultDisplayed = false;
 }
 
+// toggles sign off/on
+
+function toggleSign() {
+    // leave the current token in place; just mark we're back in entry mode
+    if (cal.resultDisplayed) {
+        cal.resultDisplayed = false;
+    }
+    // if nothing yet, start from 0 so +/- shows -0 => 0
+    if (cal.token === "") {
+        cal.token = "0";
+    }
+
+    cal.token = cal.token.startsWith("-") ? cal.token.slice(1) : "-" + cal.token;
+    display.value = cal.token;
+}
+
 const operations = ["+", "-", "/", "*", "^"]
 const buttons = document.querySelectorAll('button')
 const display = document.getElementById("display");
@@ -96,6 +114,8 @@ buttons.forEach(button => {
         let digit = (/^\d$|^\.$/.test(text));
         let equal = text === "=";
         let clear = text === "clear";
+        let toggle = text === "+/-";
+        console.log(toggle)
 
         
 
@@ -115,6 +135,13 @@ buttons.forEach(button => {
         if (clear) {
             display.value = ""
             clearCal();
+            return;
+        }
+
+        // handle +/- sign
+        if (toggle) {
+            toggleSign();
+            display.value = cal.token;
             return;
         }
 
