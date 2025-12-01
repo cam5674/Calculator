@@ -24,6 +24,11 @@ body {
     background-color: #EEE5E9;
 
 }
+
+.btn {
+  border:  .5px solid #1C110A;
+
+}
 .btn {
     font-family: 'Orbitron', "Roboto Mono", "Consolas", "Courier New", monospace;
     font-size: 1.2rem;
@@ -37,19 +42,36 @@ body {
     font-weight: 700;
 }
 
+.btn.eq,
+.btn.toggle,
+.btn.square,
+.btn.backspace {
+  background: #cfd8e3;
+}
+
+.btn.eq:hover,
+.btn.toggle:hover,
+.btn.square:hover,
+.btn.backspace:hover {
+  background: #b8c4d2; /* hover shade */
+}
+
 .btn.op {
-    background: #9B2915;
+    background: #e93317;
 }
 .btn.op:hover {
-    background-color: #e93317;
+    background-color: #9B2915;
+}
+.btn.digit:hover {
+    background-color: #e0e7ef ;
 }
 
 .btn.action {
-    background: #E9B44C;
+    background: #faa701;
 }
 
 .btn.action:hover {
-    background-color:  #faa701;
+    background-color:  #E9B44C;
 }
 .calculator .buttons {
     width: 560px;

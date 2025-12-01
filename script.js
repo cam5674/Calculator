@@ -40,6 +40,34 @@ function operate (a,b,c) {
 
 }
 
+// deletes last token
+function backspace (){
+    if (cal.token === "") {return;}
+    cal.resultDisplayed = false;
+    cal.token = cal.token.slice(0,-1);
+    // Guard against a bare minus
+    if (cal.token === "-" || cal.token === "-0"){
+        cal.token = "";
+    }
+    display.value = cal.token;
+}
+
+// squares the current token
+function square() {
+
+    if (cal.token === "") {return;}
+    // Get number to square
+    const num = Number(cal.token);
+    const squared = num * num;
+    cal.token = String(squared);
+    // Update display, op, and number
+    display.value = formatDisplay(squared);
+    cal.prev.op = "^";
+    cal.prev.number = 2;
+    cal.resultDisplayed = true;
+
+}
+
 
 // formats the display by rounding to 12 decimal places and using
 // toExponential if the number is too long.
@@ -115,10 +143,14 @@ buttons.forEach(button => {
         let equal = text === "=";
         let clear = text === "clear";
         let toggle = text === "+/-";
-        console.log(toggle)
+        let sq = text === "x²";
+        let bs = text === "⌫";
 
         
-
+        if (bs){
+            backspace();
+            return
+        }
         // check if digit and then append to the token string
         if (digit) {
             if (cal.resultDisplayed && cal.operators.length == 0) {
@@ -145,6 +177,11 @@ buttons.forEach(button => {
             return;
         }
 
+        // square current token
+        if (sq) {
+            square();
+        }
+
 
         // if operator was pressed
         if (op) {
@@ -163,7 +200,6 @@ buttons.forEach(button => {
             cal.operands.push(Number(cal.token))
             cal.token = "";
             }
-
             // get incoming operator and compare it to the top of the stack
             // check precedence and complete computation until the stack is empty
             while (cal.operators.length > 0) {

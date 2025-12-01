@@ -258,3 +258,37 @@ describe("Edge / Formatting", () => {
     expect(display.value).toBe("1024");
   });
 });
+
+describe("Square", () => {
+  test("squares the current number", () => {
+    clickButtons("3", "square");
+    expect(display.value).toBe("9");
+  });
+
+  test("squares a decimal and formats the result", () => {
+    clickButtons("1", ".", "2", "3", "4", "square");
+    expect(display.value).toBe("1.522756");
+  });
+
+  test("repeat equals after square keeps squaring the result", () => {
+    clickButtons("3", "square", "equal");
+    expect(display.value).toBe("81");
+  });
+});
+
+describe("Backspace", () => {
+  test("removes last digit", () => {
+    clickButtons("1", "2", "3", "backspace");
+    expect(display.value).toBe("12");
+  });
+
+  test("removing last digit from negative clears token instead of NaN", () => {
+    clickButtons("toggle", "5", "backspace");
+    expect(display.value).toBe("");
+  });
+
+  test("backspacing a displayed result keeps editing instead of clearing on next digit", () => {
+    clickButtons("2", "add", "3", "equal", "backspace", "4");
+    expect(display.value).toBe("4");
+  });
+});
